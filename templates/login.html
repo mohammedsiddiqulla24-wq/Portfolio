@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Admin Login{% endblock %}
+
+{% block content %}
+
+<section class="login-section d-flex align-items-center justify-content-center py-5" style="min-height: 60vh;">
+
+    <div class="card p-4 p-md-5 shadow-sm border-0 w-100" style="max-width: 420px; border-radius: var(--radius);">
+
+        <div class="text-center mb-4">
+            <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3" style="width: 60px; height: 60px; background: rgba(79, 70, 229, 0.1); color: var(--primary);">
+                <i class="bi bi-shield-lock-fill fs-2"></i>
+            </div>
+            
+            <h2 class="fw-bold mb-2" style="color: var(--text);">Admin Access</h2>
+            <p class="small mb-0" style="color: var(--muted);">
+                Secure login to manage portfolio content
+            </p>
+        </div>
+
+        <form method="POST">
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold" style="color: var(--muted); font-size: 0.9rem;">Email Address</label>
+                <div class="position-relative">
+                    <i class="bi bi-envelope position-absolute top-50 translate-middle-y ms-3" style="color: var(--muted);"></i>
+                    <input type="email"
+                           name="email"
+                           class="form-control modern-input"
+                           style="padding-left: 2.5rem;" 
+                           required>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-semibold" style="color: var(--muted); font-size: 0.9rem;">Password</label>
+                <div class="position-relative">
+                    <i class="bi bi-key position-absolute top-50 translate-middle-y ms-3" style="color: var(--muted);"></i>
+                    <input type="password"
+                           name="password"
+                           class="form-control modern-input"
+                           style="padding-left: 2.5rem;"
+                           required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 btn-lg rounded-pill fw-bold transition d-flex align-items-center justify-content-center gap-2 mt-2">
+                Login <i class="bi bi-box-arrow-in-right"></i>
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+{% endblock %}

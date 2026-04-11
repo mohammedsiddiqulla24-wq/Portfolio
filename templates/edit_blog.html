@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Edit Blog{% endblock %}
+
+{% block content %}
+
+<section class="dashboard-hero text-center py-5 mb-5 position-relative overflow-hidden">
+    <div class="container position-relative z-1">
+        <h1 class="fw-bold display-5">Edit Blog Post</h1>
+        <p class="mt-2 fs-5 mx-auto" style="color: rgba(255,255,255,0.8); max-width: 600px;">
+            Update your article content and publish changes.
+        </p>
+    </div>
+</section>
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+
+        <div class="card p-4 p-md-5 shadow-sm border-0 mb-5" style="border-radius: var(--radius);">
+
+            <form method="POST">
+
+                <div class="mb-4">
+                    <label class="form-label fw-semibold" style="color: var(--muted); font-size: 0.9rem;">Title</label>
+                    <input type="text"
+                           name="title"
+                           value="{{ post['title'] }}"
+                           class="form-control modern-input"
+                           required>
+                </div>
+
+                <div class="mb-5">
+                    <label class="form-label fw-semibold" style="color: var(--muted); font-size: 0.9rem;">Content</label>
+                    <textarea name="content"
+                              rows="8"
+                              class="form-control modern-input"
+                              required>{{ post['content'] }}</textarea>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center gap-3 flex-wrap">
+
+                    <a href="/dashboard"
+                       class="btn btn-outline-secondary btn-lg rounded-pill px-4 transition d-flex align-items-center">
+                        <i class="bi bi-x-circle me-2"></i> Cancel
+                    </a>
+
+                    <button type="submit" class="btn btn-primary btn-lg rounded-pill px-4 fw-bold transition d-flex align-items-center">
+                        <i class="bi bi-check2-circle me-2"></i> Update Blog
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

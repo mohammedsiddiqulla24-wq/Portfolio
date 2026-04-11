@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<section class="hero-section position-relative overflow-hidden mb-5">
+    <div class="container position-relative z-1">
+        <div class="row align-items-center g-5">
+
+            <div class="col-lg-7 text-center text-lg-start">
+                
+                <span class="tech-badge bg-white bg-opacity-10 text-white border-0 mb-3 px-3 py-2" style="font-size: 0.85rem;">Portfolio</span>
+
+                <h1 class="display-3 fw-bolder mb-3 text-white">
+                    Mohammed Siddiq Ulla
+                </h1>
+
+                <h3 class="mb-4" style="color: #818cf8; min-height: 40px;">
+                    <span id="typed-text"></span>
+                </h3>
+
+                <p class="lead mb-5 mx-auto mx-lg-0" style="color: rgba(255,255,255,0.8); max-width: 600px; line-height: 1.8;">
+                    I build scalable Salesforce-native and web-based systems focused on architecture, security, and performance.
+                    <br><br>
+                    At Axolt, I work on production-level finance modules including AR/AP, financial reporting components, credit note refunds, and complex Apex-driven automation. I specialize in Aura-to-LWC migrations, Agentforce integrations, and secure enterprise development.
+                    <br><br>
+                    Creator of Smart Queue and certified Salesforce App Builder, I focus on building systems that are structured, efficient, and built to scale.
+                </p>
+
+                <div class="d-flex flex-column flex-sm-row align-items-center justify-content-center justify-content-lg-start gap-3 mb-4">
+                    <a href="/projects" class="btn btn-primary btn-lg rounded-pill px-4 py-2 fw-semibold transition">
+                        View Projects <i class="bi bi-arrow-right ms-2"></i>
+                    </a>
+                    <a href="/contact" class="btn btn-outline-light btn-lg rounded-pill px-4 py-2 fw-semibold transition">
+                        Contact Me
+                    </a>
+                </div>
+
+                <div class="d-flex align-items-center justify-content-center justify-content-lg-start gap-3 mt-4">
+                    <span class="fw-medium" style="color: rgba(255,255,255,0.6); font-size: 0.95rem;">Connect:</span>
+                    <a href="https://github.com/mohammedsiddiqulla24-wq"
+                       target="_blank" rel="noopener noreferrer"
+                       class="text-white transition opacity-75 hover-opacity-100 fs-4">
+                        <i class="bi bi-github"></i>
+                    </a>
+                    <a href="https://linkedin.com/in/mohammed-siddiq-ulla-a070932b4"
+                       target="_blank" rel="noopener noreferrer"
+                       class="text-white transition opacity-75 hover-opacity-100 fs-4">
+                        <i class="bi bi-linkedin"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-5 text-center mt-5 mt-lg-0">
+                <div class="position-relative d-inline-block">
+                    <div class="position-absolute top-50 start-50 translate-middle rounded-circle" style="width: 105%; height: 105%; background: radial-gradient(circle, rgba(79,70,229,0.2) 0%, rgba(0,0,0,0) 70%); z-index: -1;"></div>
+                    
+                    <img src="{{ url_for('static', filename='images/Cover Photo2.jpg') }}"
+                         class="profile-img"
+                         alt="Mohammed Siddiq Ulla">
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="py-5 mb-5">
+    <div class="container">
+        <div class="row g-4 text-center">
+
+            <div class="col-sm-6 col-lg-3">
+                <div class="stat-card p-4 h-100 d-flex flex-column justify-content-center">
+                    <i class="bi bi-kanban fs-1 mb-3" style="color: var(--primary);"></i>
+                    <h2 class="fw-bolder display-5 mb-1" style="color: var(--text);">
+                        {{ project_count }}<span style="color: var(--primary);">+</span>
+                    </h2>
+                    <p class="mb-0 fw-medium" style="color: var(--muted);">Projects Built</p>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+                <div class="stat-card p-4 h-100 d-flex flex-column justify-content-center">
+                    <i class="bi bi-braces-asterisk fs-1 mb-3" style="color: var(--primary);"></i>
+                    <h2 class="fw-bolder display-5 mb-1" style="color: var(--text);">
+                        {{ tech_count }}<span style="color: var(--primary);">+</span>
+                    </h2>
+                    <p class="mb-0 fw-medium" style="color: var(--muted);">Technologies Used</p>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+                <div class="stat-card p-4 h-100 d-flex flex-column justify-content-center">
+                    <i class="bi bi-clock-history fs-1 mb-3" style="color: var(--primary);"></i>
+                    <h2 class="fw-bolder display-5 mb-1" style="color: var(--text);">
+                        {{ 2026 - 2025 }}<span style="color: var(--primary);">+</span>
+                    </h2>
+                    <p class="mb-0 fw-medium" style="color: var(--muted);">Years Building</p>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+                <div class="stat-card p-4 h-100 d-flex flex-column justify-content-center">
+                    <i class="bi bi-award fs-1 mb-3" style="color: var(--primary);"></i>
+                    <h2 class="fw-bolder display-5 mb-1" style="color: var(--text);">
+                        1
+                    </h2>
+                    <p class="mb-0 fw-medium" style="color: var(--muted);">Certifications</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="py-5 mb-5">
+    <div class="container">
+        
+        <div class="text-center mb-5">
+            <h2 class="fw-bold display-6" style="color: var(--text);">Technical Arsenal</h2>
+            <p class="fs-5 mx-auto" style="color: var(--muted); max-width: 600px;">
+                Technologies and tools I use to build robust solutions.
+            </p>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card p-4 h-100 shadow-sm border-0 transition" style="border-radius: var(--radius);">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="d-flex align-items-center justify-content-center rounded-circle" style="width: 50px; height: 50px; background: rgba(79, 70, 229, 0.1); color: var(--primary);">
+                            <i class="bi bi-cloud-fill fs-4"></i>
+                        </div>
+                        <h4 class="fw-bold mb-0 ms-3" style="color: var(--text);">Salesforce</h4>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <span class="tech-badge m-0">Apex</span>
+                        <span class="tech-badge m-0">LWC</span>
+                        <!--<span class="tech-badge m-0">Aura</span>-->
+                        <span class="tech-badge m-0">SOQL / SOSL</span>
+                        <span class="tech-badge m-0">Agentforce</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card p-4 h-100 shadow-sm border-0 transition" style="border-radius: var(--radius);">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="d-flex align-items-center justify-content-center rounded-circle" style="width: 50px; height: 50px; background: rgba(79, 70, 229, 0.1); color: var(--primary);">
+                            <i class="bi bi-server fs-4"></i>
+                        </div>
+                        <h4 class="fw-bold mb-0 ms-3" style="color: var(--text);">Backend</h4>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <span class="tech-badge m-0">Python</span>
+                        <span class="tech-badge m-0">Flask</span>
+                        <span class="tech-badge m-0">MySQL</span>
+                        <!--<span class="tech-badge m-0">REST APIs</span>-->
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="card p-4 h-100 shadow-sm border-0 transition" style="border-radius: var(--radius);">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="d-flex align-items-center justify-content-center rounded-circle" style="width: 50px; height: 50px; background: rgba(79, 70, 229, 0.1); color: var(--primary);">
+                            <i class="bi bi-window-sidebar fs-4"></i>
+                        </div>
+                        <h4 class="fw-bold mb-0 ms-3" style="color: var(--text);">Frontend</h4>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <span class="tech-badge m-0">JavaScript</span>
+                        <span class="tech-badge m-0">HTML5</span>
+                        <span class="tech-badge m-0">CSS3</span>
+                        <span class="tech-badge m-0">Bootstrap</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="cta-section py-5 mb-5">
+    <div class="container">
+        <div class="card border-0 shadow-sm text-center p-5 position-relative overflow-hidden" style="border-radius: var(--radius); background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);">
+            
+            <div class="position-absolute top-0 start-0 w-100 h-100" style="background: radial-gradient(circle at top right, rgba(79, 70, 229, 0.05), transparent 50%); pointer-events: none;"></div>
+            
+            <div class="position-relative z-1">
+                <h2 class="fw-bold mb-3 display-6" style="color: var(--text);">
+                    Let’s Build Something Impactful
+                </h2>
+                
+                <p class="mb-5 fs-5 mx-auto" style="color: var(--muted); max-width: 600px;">
+                    Open to internships, freelance projects, and full-time opportunities.
+                </p>
+                
+                <a href="/contact" class="btn btn-primary btn-lg rounded-pill px-5 py-3 fw-bold transition shadow-sm d-inline-flex align-items-center">
+                    Work With Me <i class="bi bi-rocket-takeoff ms-2 fs-5"></i>
+                </a>
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+<script>
+    var typed = new Typed("#typed-text", {
+        strings: [
+            "Full Stack Developer",
+            "Salesforce Developer",
+            "Product Builder"
+        ],
+        typeSpeed: 60,
+        backSpeed: 40,
+        loop: true
+    });
+</script>
+{% endblock %}

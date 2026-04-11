@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post["title"] }}{% endblock %}
+
+{% block meta_description %}
+{{ post["content"][:150] }}
+{% endblock %}
+
+{% block og_title %}
+{{ post["title"] }}
+{% endblock %}
+
+{% block og_description %}
+{{ post["content"][:150] }}
+{% endblock %}
+
+{% block content %}
+
+<section class="blog-hero text-center mb-5 position-relative overflow-hidden">
+    <div class="container position-relative z-1">
+        
+        <span class="tech-badge mb-3">Blog Article</span>
+        
+        <h1 class="fw-bold display-4 mt-2 mb-3">
+            {{ post["title"] }}
+        </h1>
+        
+        <div class="d-flex align-items-center justify-content-center gap-2 mt-3" style="color: rgba(255,255,255,0.7);">
+            <i class="bi bi-calendar3"></i>
+            <span>{{ post["created_at"] }}</span>
+        </div>
+        
+    </div>
+</section>
+
+<div class="row justify-content-center">
+    <div class="col-lg-10 col-xl-8">
+        
+        <article class="card p-4 p-md-5 border-0 mb-5" style="border-radius: var(--radius);">
+
+            {% if post["image_name"] %}
+            <img src="{{ url_for('static', filename='uploads/' + post['image_name']) }}"
+                 class="img-fluid mb-5 w-100 shadow-sm blog-feature-image"
+                 style="border-radius: calc(var(--radius) - 4px); max-height: 450px; object-fit: cover;"
+                 alt="{{ post['title'] }}">
+            {% endif %}
+
+            <div class="blog-content" style="color: var(--text); font-size: 1.125rem; line-height: 1.8;">
+                {{ post["content"] }}
+            </div>
+
+            <hr class="my-5" style="border-color: var(--border);">
+
+            <div class="text-center">
+                <a href="/blog" class="btn btn-outline-primary rounded-pill px-4 py-2 d-inline-flex align-items-center gap-2 transition">
+                    <i class="bi bi-arrow-left"></i> Back to Blog
+                </a>
+            </div>
+
+        </article>
+        
+    </div>
+</div>
+
+{% endblock %}

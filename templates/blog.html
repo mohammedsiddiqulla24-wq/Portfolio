@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}Blog{% endblock %}
+
+{% block content %}
+
+<section class="blog-hero text-center py-5 mb-5 position-relative overflow-hidden">
+    <div class="container position-relative z-1">
+        <h1 class="fw-bold display-4">Insights & Articles</h1>
+        <p class="mt-3 fs-5 mx-auto" style="color: rgba(255,255,255,0.8); max-width: 600px;">
+            Thoughts on development, architecture, and building scalable systems.
+        </p>
+    </div>
+</section>
+
+<div class="row g-4">
+
+    {% for post in posts %}
+    <div class="col-lg-6">
+
+        <div class="blog-card h-100 d-flex flex-column shadow-sm border-0" style="border-radius: var(--radius);">
+
+            {% if post["image_name"] %}
+            <img src="{{ url_for('static', filename='uploads/' + post['image_name']) }}"
+                 class="img-fluid blog-thumbnail w-100" 
+                 style="border-top-left-radius: var(--radius); border-top-right-radius: var(--radius); object-fit: cover;"
+                 alt="{{ post['title'] }}">
+            {% endif %}
+
+            <div class="p-4 d-flex flex-column flex-grow-1">
+                
+                <div class="d-flex align-items-center gap-2 mb-3" style="color: var(--muted); font-size: 0.875rem;">
+                    <i class="bi bi-calendar3"></i>
+                    <time>{{ post["created_at"] }}</time>
+                </div>
+
+                <h4 class="fw-bold mb-3" style="color: var(--text);">
+                    {{ post["title"] }}
+                </h4>
+
+                <p class="mb-4" style="color: var(--muted); line-height: 1.6;">
+                    {{ post["content"][:180] }}
+                    {% if post["content"]|length > 180 %}...{% endif %}
+                </p>
+
+                <div class="mt-auto">
+                    <a href="/blog/{{ post['id'] }}"
+                       class="btn btn-outline-primary rounded-pill px-4 py-2 d-inline-flex align-items-center gap-2 transition">
+                        Read More <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    {% else %}
+        <div class="col-12 text-center py-5">
+            <div class="p-5 rounded-4 shadow-sm" style="background: var(--surface); border: 1px solid var(--border);">
+                <i class="bi bi-journal-x fs-1 mb-3" style="color: var(--muted);"></i>
+                <h4 style="color: var(--text);">No blog posts yet.</h4>
+                <p style="color: var(--muted);">Check back soon for new insights.</p>
+            </div>
+        </div>
+    {% endfor %}
+
+</div>
+
+{% if total_pages > 1 %}
+<nav aria-label="Blog pagination">
+  <ul class="pagination justify-content-center mt-5 gap-2 custom-pagination">
+
+    {% if page > 1 %}
+    <li class="page-item">
+      <a class="page-link rounded-pill border-0 shadow-sm px-4" href="?page={{ page-1 }}" 
+         style="background: var(--surface); color: var(--text); transition: var(--transition);">Previous</a>
+    </li>
+    {% endif %}
+
+    {% for p in range(1, total_pages + 1) %}
+    <li class="page-item {% if p == page %}active{% endif %}">
+      <a class="page-link rounded-circle border-0 shadow-sm d-flex align-items-center justify-content-center fw-semibold" 
+         href="?page={{ p }}" 
+         style="width: 40px; height: 40px; background: {% if p == page %}var(--primary){% else %}var(--surface){% endif %}; color: {% if p == page %}#fff{% else %}var(--text){% endif %}; transition: var(--transition);">
+         {{ p }}
+      </a>
+    </li>
+    {% endfor %}
+
+    {% if page < total_pages %}
+    <li class="page-item">
+      <a class="page-link rounded-pill border-0 shadow-sm px-4" href="?page={{ page+1 }}" 
+         style="background: var(--surface); color: var(--text); transition: var(--transition);">Next</a>
+    </li>
+    {% endif %}
+
+  </ul>
+</nav>
+{% endif %}
+
+{% endblock %}
