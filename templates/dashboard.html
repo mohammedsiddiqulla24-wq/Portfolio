@@ -28,6 +28,12 @@
             <i class="bi bi-journal-text me-2"></i> Blogs
         </button>
     </li>
+
+    <li class="nav-item" role="presentation">
+        <button class="nav-link rounded-pill px-4 fw-semibold transition d-flex align-items-center" data-bs-toggle="tab" data-bs-target="#certsTab" type="button" role="tab">
+            <i class="bi bi-patch-check me-2"></i> Certifications
+        </button>
+    </li>
 </ul>
 
 <div class="tab-content">
@@ -75,8 +81,13 @@
 
             <div class="mb-4">
                 <label class="form-label fw-semibold" style="color: var(--muted); font-size: 0.9rem;">Project Images</label>
-                <input type="file" name="images"
-                       class="form-control modern-input" multiple>
+                <div id="project-drop-zone" class="border rounded-4 p-4 text-center transition" style="border: 2px dashed var(--primary) !important; background: var(--surface-2); cursor: pointer;">
+                    <i class="bi bi-cloud-arrow-up display-4" style="color: var(--primary);"></i>
+                    <p class="mt-2 mb-1 fw-medium" style="color: var(--text);">Drag & Drop images here</p>
+                    <p class="small mb-3" style="color: var(--muted);">or click to browse</p>
+                    <input type="file" name="images" id="project-file-input" class="d-none" multiple accept="image/png, image/jpeg, image/gif">
+                </div>
+                <div id="project-preview-container" class="d-flex flex-wrap gap-3 mt-3"></div>
             </div>
 
             <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold transition">
@@ -142,7 +153,7 @@
                         <td class="py-3 fw-medium">{{ msg["name"] }}</td>
                         <td class="py-3"><a href="mailto:{{ msg['email'] }}" class="text-decoration-none" style="color: var(--primary);">{{ msg["email"] }}</a></td>
                         <td class="py-3">{{ msg["subject"] }}</td>
-                        <td class="py-3 text-muted small">{{ msg["created_at"] }}</td>
+                        <td class="py-3 small" style="color: var(--muted);">{{ msg["created_at"] }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -153,9 +164,10 @@
             <i class="bi bi-inbox fs-1 mb-3 d-block" style="color: var(--muted);"></i>
             <p style="color: var(--muted);">No messages yet.</p>
         </div>
-        {% endif %}
+        {% endif %} 
     </div>
 
+</div>
 </div>
 
 <div class="tab-pane fade" id="blogsTab" role="tabpanel">
@@ -169,6 +181,17 @@
                 <input type="text" name="title"
                        class="form-control modern-input"
                        placeholder="Blog Title" required>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-semibold" style="color: var(--muted); font-size: 0.9rem;">Blog Images</label>
+                <div id="blog-drop-zone" class="border rounded-4 p-4 text-center transition" style="border: 2px dashed var(--primary) !important; background: var(--surface-2); cursor: pointer;">
+                    <i class="bi bi-cloud-arrow-up display-4" style="color: var(--primary);"></i>
+                    <p class="mt-2 mb-1 fw-medium" style="color: var(--text);">Drag & Drop images here</p>
+                    <p class="small mb-3" style="color: var(--muted);">or click to browse</p>
+                    <input type="file" name="images" id="blog-file-input" class="d-none" multiple accept="image/png, image/jpeg, image/gif">
+                </div>
+                <div id="blog-preview-container" class="d-flex flex-wrap gap-3 mt-3"></div>
             </div>
 
             <div class="mb-4">
@@ -207,6 +230,32 @@
     </div>
 
 </div>
+
+<div class="tab-pane fade" id="certsTab" role="tabpanel">
+        <div class="card p-4 p-md-5 mb-5 shadow-sm border-0" style="border-radius: var(--radius);">
+            <h4 class="fw-bold mb-4" style="color: var(--text);">Add Certification</h4>
+            <form method="POST" action="/add-certification" enctype="multipart/form-data">
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <input type="text" name="name" class="form-control modern-input" placeholder="Certification Name" required>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" name="organization" class="form-control modern-input" placeholder="Issuing Organization (e.g. Salesforce)">
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <input type="text" name="link" class="form-control modern-input" placeholder="Credential Link (URL)">
+                </div>
+                <div class="mb-4">
+                    <label class="form-label fw-semibold" style="color: var(--muted); font-size: 0.9rem;">Certificate Badge/Image</label>
+                    <input type="file" name="image" class="form-control modern-input" accept="image/*">
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold transition">
+                    <i class="bi bi-patch-check me-2"></i> Add Certification
+                </button>
+            </form>
+        </div>
+    </div>
 
 </div>
 

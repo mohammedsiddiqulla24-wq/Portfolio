@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from flask_mysqldb import MySQL
 from werkzeug.security import generate_password_hash, check_password_hash
 from config import Config
@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 app.config["UPLOAD_FOLDER"] = "static/uploads"
-app.config["ALLOWED_EXTENSIONS"] = {"png", "jpg", "jpeg", "gif"}
+app.config["ALLOWED_EXTENSIONS"] = {"png", "jpg", "jpeg", "gif", "pdf"}
 mysql = MySQL(app)
 
 
@@ -25,25 +25,57 @@ def home():
 
     cur.execute("SELECT tech_stack FROM projects WHERE tech_stack IS NOT NULL")
     rows = cur.fetchall()
-
     tech_set = set()
     for row in rows:
         techs = row["tech_stack"].split(",")
         for t in techs:
             tech_set.add(t.strip())
-
     tech_count = len(tech_set)
+
+    cur.execute("SELECT COUNT(*) as total FROM certifications")
+    cert_count = cur.fetchone()["total"]
 
     start_year = 2024
     current_year = datetime.now().year
     experience_years = current_year - start_year
 
+    cur.close()
+
     return render_template(
         "home.html",
         project_count=project_count,
         tech_count=tech_count,
-        experience_years=experience_years
+        experience_years=experience_years,
+        cert_count=cert_count  
     )
+
+@app.route("/add-certification", methods=["POST"])
+def add_certification():
+    if "admin" not in session:
+        return redirect(url_for("login"))
+
+    name = request.form["name"]
+    org = request.form["organization"]
+    link = request.form["link"]
+    image = request.files.get("image")
+    filename = None
+
+    if image and allowed_file(image.filename):
+        filename = secure_filename(image.filename)
+        image.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+
+    cur = mysql.connection.cursor()
+    cur.execute("""
+        INSERT INTO certifications (name, issuing_organization, cert_link, image_name)
+        VALUES (%s, %s, %s, %s)
+    """, (name, org, link, filename))
+    
+    mysql.connection.commit()
+    cur.close()
+
+    flash("Certification added!", "success")
+    return redirect(url_for("dashboard"))
+
 @app.route("/projects")
 def projects():
     cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -152,7 +184,7 @@ def contact():
     if request.method == "POST":
         name = request.form["name"]
         email = request.form["email"]
-        subject = request.form["subject"]
+        subject = request.form.get("subject", "") 
         message = request.form["message"]
 
         cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
@@ -160,17 +192,19 @@ def contact():
             """
             INSERT INTO messages (name, email, subject, message)
             VALUES (%s, %s, %s, %s)
-        """,
+            """,
             (name, email, subject, message),
         )
         mysql.connection.commit()
         cur.close()
 
+        if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+            return jsonify({"status": "success", "message": "Message sent successfully! I'll get back to you soon."})
+
         flash("Message sent successfully!", "success")
         return redirect(url_for("contact"))
 
     return render_template("contact.html")
-
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -234,6 +268,11 @@ def blog():
     """, (per_page, offset))
 
     posts = cur.fetchall()
+    
+    for post in posts:
+        cur.execute("SELECT image_name FROM blog_images WHERE blog_post_id=%s", (post["id"],))
+        post["images"] = cur.fetchall()
+
     cur.close()
 
     total_pages = (total_posts + per_page - 1) // per_page
@@ -253,23 +292,31 @@ def add_blog():
     title = request.form["title"]
     content = request.form["content"]
 
-    images = request.files.getlist("images")
-    filename = None
-
-    if images and allowed_file(images.filename):
-        filename = secure_filename(images.filename)
-        images.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
-
     cur = mysql.connection.cursor()
+    
     cur.execute("""
-        INSERT INTO blog_posts (title, content, image_name)
-        VALUES (%s, %s, %s)
-    """, (title, content, filename))
+        INSERT INTO blog_posts (title, content)
+        VALUES (%s, %s)
+    """, (title, content))
+    
+    blog_post_id = cur.lastrowid
+
+    images = request.files.getlist("images")
+
+    for image in images:
+        if image and allowed_file(image.filename):
+            filename = secure_filename(image.filename)
+            image.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+
+            cur.execute("""
+                INSERT INTO blog_images (blog_post_id, image_name)
+                VALUES (%s, %s)
+            """, (blog_post_id, filename))
 
     mysql.connection.commit()
     cur.close()
 
-    flash("Blog post added!", "success")
+    flash("Blog post published!", "success")
     return redirect(url_for("dashboard"))
 
 @app.route("/blog/<int:post_id>")
@@ -277,13 +324,17 @@ def blog_detail(post_id):
     cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cur.execute("SELECT * FROM blog_posts WHERE id=%s", (post_id,))
     post = cur.fetchone()
+    
+    if not post:
+        cur.close()
+        return "Post not found", 404
+        
+    cur.execute("SELECT image_name FROM blog_images WHERE blog_post_id=%s", (post_id,))
+    post["images"] = cur.fetchall()
+    
     cur.close()
 
-    if not post:
-        return "Post not found", 404
-
     return render_template("blog_detail.html", post=post)
-
 
 @app.route("/delete-blog/<int:post_id>")
 def delete_blog(post_id):

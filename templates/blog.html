@@ -19,8 +19,8 @@
 
         <div class="blog-card h-100 d-flex flex-column shadow-sm border-0" style="border-radius: var(--radius);">
 
-            {% if post["image_name"] %}
-            <img src="{{ url_for('static', filename='uploads/' + post['image_name']) }}"
+            {% if post.images and post.images|length > 0 %}
+            <img src="{{ url_for('static', filename='uploads/' + post.images[0]['image_name']) }}"
                  class="img-fluid blog-thumbnail w-100" 
                  style="border-top-left-radius: var(--radius); border-top-right-radius: var(--radius); object-fit: cover;"
                  alt="{{ post['title'] }}">
@@ -38,8 +38,7 @@
                 </h4>
 
                 <p class="mb-4" style="color: var(--muted); line-height: 1.6;">
-                    {{ post["content"][:180] }}
-                    {% if post["content"]|length > 180 %}...{% endif %}
+                    {{ post["content"] | striptags | truncate(180) }}
                 </p>
 
                 <div class="mt-auto">

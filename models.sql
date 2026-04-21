@@ -41,12 +41,27 @@ CREATE TABLE project_images (
     FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
 );
 
-ALTER TABLE blog_posts ADD COLUMN image_name VARCHAR(255);
-
 ALTER TABLE projects DROP COLUMN image_url;
 
 CREATE TABLE resume (
     id INT PRIMARY KEY AUTO_INCREMENT,
     file_name VARCHAR(255),
     uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE blog_images (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    blog_post_id INT,
+    image_name VARCHAR(255),
+    FOREIGN KEY (blog_post_id) REFERENCES blog_posts(id) ON DELETE CASCADE
+);
+
+CREATE TABLE certifications (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    issuing_organization VARCHAR(255),
+    issue_date DATE,
+    cert_link VARCHAR(300),
+    image_name VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

@@ -38,15 +38,32 @@
         
         <article class="card p-4 p-md-5 border-0 mb-5" style="border-radius: var(--radius);">
 
-            {% if post["image_name"] %}
-            <img src="{{ url_for('static', filename='uploads/' + post['image_name']) }}"
-                 class="img-fluid mb-5 w-100 shadow-sm blog-feature-image"
-                 style="border-radius: calc(var(--radius) - 4px); max-height: 450px; object-fit: cover;"
-                 alt="{{ post['title'] }}">
+            {% if post.images %}
+            <div id="blogCarousel" class="carousel slide mb-5 shadow-sm" data-bs-ride="carousel" style="border-radius: calc(var(--radius) - 4px); overflow: hidden;">
+                <div class="carousel-inner">
+                    {% for img in post.images %}
+                    <div class="carousel-item {% if loop.first %}active{% endif %}">
+                        <img src="{{ url_for('static', filename='uploads/' + img['image_name']) }}"
+                             class="d-block w-100"
+                             style="max-height: 450px; object-fit: cover;"
+                             alt="{{ post['title'] }}">
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                {% if post.images|length > 1 %}
+                <button class="carousel-control-prev" type="button" data-bs-target="#blogCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#blogCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                </button>
+                {% endif %}
+            </div>
             {% endif %}
 
             <div class="blog-content" style="color: var(--text); font-size: 1.125rem; line-height: 1.8;">
-                {{ post["content"] }}
+                {{ post["content"]|safe }}
             </div>
 
             <hr class="my-5" style="border-color: var(--border);">

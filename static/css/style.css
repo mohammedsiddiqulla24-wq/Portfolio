@@ -138,18 +138,23 @@ body {
 .modern-input {
   border-radius: 12px;
   padding: 12px 16px;
-  border: 2px solid var(--border);
-  background: var(--surface-2);
-  color: var(--text);
+  border: 2px solid var(--border) !important;
+  background-color: var(--surface-2) !important;
+  color: var(--text) !important;
   transition: var(--transition);
   width: 100%;
 }
 
 .modern-input:focus {
-  border-color: var(--primary);
+  border-color: var(--primary) !important;
   outline: none;
   box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
-  background: var(--surface);
+  background-color: var(--surface) !important;
+  color: var(--text) !important;
+}
+
+textarea.modern-input {
+  color: var(--text) !important;
 }
 
 .profile-img {
