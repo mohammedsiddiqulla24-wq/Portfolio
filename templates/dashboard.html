@@ -28,7 +28,6 @@
             <i class="bi bi-journal-text me-2"></i> Blogs
         </button>
     </li>
-
     <li class="nav-item" role="presentation">
         <button class="nav-link rounded-pill px-4 fw-semibold transition d-flex align-items-center" data-bs-toggle="tab" data-bs-target="#certsTab" type="button" role="tab">
             <i class="bi bi-patch-check me-2"></i> Certifications
@@ -38,200 +37,153 @@
 
 <div class="tab-content">
 
-<div class="tab-pane fade show active" id="projectsTab" role="tabpanel">
-
-    <div class="card p-4 p-md-5 mb-5 shadow-sm border-0" style="border-radius: var(--radius);">
-        <h4 class="fw-bold mb-4" style="color: var(--text);">Add New Project</h4>
-
-        <form method="POST" action="/add-project" enctype="multipart/form-data">
-
-            <div class="row g-3 mb-3">
-                <div class="col-md-6">
-                    <input type="text" name="title"
-                           class="form-control modern-input"
-                           placeholder="Project Title" required>
+    <div class="tab-pane fade show active" id="projectsTab" role="tabpanel">
+        <div class="card p-4 p-md-5 mb-5 shadow-sm border-0" style="border-radius: var(--radius);">
+            <h4 class="fw-bold mb-4" style="color: var(--text);">Add New Project</h4>
+            <form method="POST" action="/add-project" enctype="multipart/form-data">
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <input type="text" name="title" class="form-control modern-input" placeholder="Project Title" required>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" name="tech_stack" class="form-control modern-input" placeholder="Tech Stack (e.g., Python, Flask)">
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <input type="text" name="tech_stack"
-                           class="form-control modern-input"
-                           placeholder="Tech Stack (e.g., Python, Flask)">
+                <div class="mb-3">
+                    <textarea name="description" rows="4" class="form-control modern-input" placeholder="Description" required></textarea>
                 </div>
-            </div>
-
-            <div class="mb-3">
-                <textarea name="description"
-                          rows="4"
-                          class="form-control modern-input"
-                          placeholder="Description"
-                          required></textarea>
-            </div>
-
-            <div class="row g-3 mb-3">
-                <div class="col-md-6">
-                    <input type="text" name="github_link"
-                           class="form-control modern-input"
-                           placeholder="GitHub Link">
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <input type="text" name="github_link" class="form-control modern-input" placeholder="GitHub Link">
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" name="live_link" class="form-control modern-input" placeholder="Live Link">
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <input type="text" name="live_link"
-                           class="form-control modern-input"
-                           placeholder="Live Link">
+                <div class="mb-4">
+                    <label class="form-label fw-semibold" style="color: var(--muted); font-size: 0.9rem;">Project Images</label>
+                    <div id="project-drop-zone" class="border rounded-4 p-4 text-center transition" style="border: 2px dashed var(--primary) !important; background: var(--surface-2); cursor: pointer;">
+                        <i class="bi bi-cloud-arrow-up display-4" style="color: var(--primary);"></i>
+                        <p class="mt-2 mb-1 fw-medium" style="color: var(--text);">Drag & Drop images here</p>
+                        <p class="small mb-3" style="color: var(--muted);">or click to browse</p>
+                        <input type="file" name="images" id="project-file-input" class="d-none" multiple accept="image/*">
+                    </div>
+                    <div id="project-preview-container" class="d-flex flex-wrap gap-3 mt-3"></div>
                 </div>
-            </div>
-
-            <div class="mb-4">
-                <label class="form-label fw-semibold" style="color: var(--muted); font-size: 0.9rem;">Project Images</label>
-                <div id="project-drop-zone" class="border rounded-4 p-4 text-center transition" style="border: 2px dashed var(--primary) !important; background: var(--surface-2); cursor: pointer;">
-                    <i class="bi bi-cloud-arrow-up display-4" style="color: var(--primary);"></i>
-                    <p class="mt-2 mb-1 fw-medium" style="color: var(--text);">Drag & Drop images here</p>
-                    <p class="small mb-3" style="color: var(--muted);">or click to browse</p>
-                    <input type="file" name="images" id="project-file-input" class="d-none" multiple accept="image/png, image/jpeg, image/gif">
-                </div>
-                <div id="project-preview-container" class="d-flex flex-wrap gap-3 mt-3"></div>
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold transition">
-                <i class="bi bi-plus-circle me-2"></i> Add Project
-            </button>
-
-        </form>
-    </div>
-
-    <div class="card p-4 p-md-5 mb-5 shadow-sm border-0" style="border-radius: var(--radius);">
-        <h4 class="fw-bold mb-4" style="color: var(--text);">Existing Projects</h4>
-
-        <ul class="dashboard-list m-0 p-0">
-            {% for project in projects %}
-            <li class="d-flex justify-content-between align-items-center py-3 border-bottom" style="border-color: var(--border) !important;">
-                <span class="fw-medium" style="color: var(--text);">{{ project["title"] }}</span>
-                <div class="d-flex gap-2">
-                    <a href="/edit-project/{{ project['id'] }}"
-                       class="btn btn-sm btn-outline-warning rounded-pill px-3 transition">Edit</a>
-                    <a href="/delete-project/{{ project['id'] }}"
-                       class="btn btn-sm btn-outline-danger rounded-pill px-3 transition">Delete</a>
-                </div>
-            </li>
-            {% else %}
-            <li class="py-4 text-center" style="color: var(--muted);">No projects yet.</li>
-            {% endfor %}
-        </ul>
-    </div>
-
-    <div class="card p-4 p-md-5 shadow-sm border-0" style="border-radius: var(--radius); background: var(--surface-2);">
-        <h5 class="fw-bold mb-4" style="color: var(--text);">Upload Resume</h5>
-
-        <form method="POST" action="/upload-resume" enctype="multipart/form-data" class="d-flex flex-column flex-md-row gap-3">
-            <input type="file" name="resume"
-                   class="form-control modern-input flex-grow-1" required>
-            <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold transition whitespace-nowrap">
-                <i class="bi bi-cloud-arrow-up me-2"></i> Upload
-            </button>
-        </form>
-    </div>
-
-</div>
-
-<div class="tab-pane fade" id="messagesTab" role="tabpanel">
-
-    <div class="card p-4 p-md-5 shadow-sm border-0" style="border-radius: var(--radius);">
-        <h4 class="fw-bold mb-4" style="color: var(--text);">Contact Messages</h4>
-
-        {% if messages %}
-        <div class="table-responsive">
-            <table class="table align-middle" style="color: var(--text);">
-                <thead>
-                    <tr style="border-bottom: 2px solid var(--border);">
-                        <th class="fw-semibold pb-3" style="color: var(--muted); border-bottom: none;">Name</th>
-                        <th class="fw-semibold pb-3" style="color: var(--muted); border-bottom: none;">Email</th>
-                        <th class="fw-semibold pb-3" style="color: var(--muted); border-bottom: none;">Subject</th>
-                        <th class="fw-semibold pb-3" style="color: var(--muted); border-bottom: none;">Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for msg in messages %}
-                    <tr style="border-bottom: 1px solid var(--border);">
-                        <td class="py-3 fw-medium">{{ msg["name"] }}</td>
-                        <td class="py-3"><a href="mailto:{{ msg['email'] }}" class="text-decoration-none" style="color: var(--primary);">{{ msg["email"] }}</a></td>
-                        <td class="py-3">{{ msg["subject"] }}</td>
-                        <td class="py-3 small" style="color: var(--muted);">{{ msg["created_at"] }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold transition">
+                    <i class="bi bi-plus-circle me-2"></i> Add Project
+                </button>
+            </form>
         </div>
-        {% else %}
-        <div class="text-center py-5">
-            <i class="bi bi-inbox fs-1 mb-3 d-block" style="color: var(--muted);"></i>
-            <p style="color: var(--muted);">No messages yet.</p>
+
+        <div class="card p-4 p-md-5 mb-5 shadow-sm border-0" style="border-radius: var(--radius);">
+            <h4 class="fw-bold mb-4" style="color: var(--text);">Existing Projects</h4>
+            <ul class="dashboard-list m-0 p-0">
+                {% for project in projects %}
+                <li class="d-flex justify-content-between align-items-center py-3 border-bottom" style="border-color: var(--border) !important;">
+                    <span class="fw-medium" style="color: var(--text);">{{ project["title"] }}</span>
+                    <div class="d-flex gap-2">
+                        <a href="/edit-project/{{ project['id'] }}" class="btn btn-sm btn-outline-warning rounded-pill px-3 transition">Edit</a>
+                        <a href="/delete-project/{{ project['id'] }}" class="btn btn-sm btn-outline-danger rounded-pill px-3 transition">Delete</a>
+                    </div>
+                </li>
+                {% else %}
+                <li class="py-4 text-center" style="color: var(--muted);">No projects yet.</li>
+                {% endfor %}
+            </ul>
         </div>
-        {% endif %} 
+
+        <div class="card p-4 p-md-5 shadow-sm border-0" style="border-radius: var(--radius); background: var(--surface-2);">
+            <h5 class="fw-bold mb-4" style="color: var(--text);">Upload Resume</h5>
+            <form method="POST" action="/upload-resume" enctype="multipart/form-data" class="d-flex flex-column flex-md-row gap-3">
+                <input type="file" name="resume" class="form-control modern-input flex-grow-1" required>
+                <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold transition">
+                    <i class="bi bi-cloud-arrow-up me-2"></i> Upload
+                </button>
+            </form>
+        </div>
     </div>
 
-</div>
-</div>
-
-<div class="tab-pane fade" id="blogsTab" role="tabpanel">
-
-    <div class="card p-4 p-md-5 mb-5 shadow-sm border-0" style="border-radius: var(--radius);">
-        <h4 class="fw-bold mb-4" style="color: var(--text);">Add Blog Post</h4>
-
-        <form method="POST" action="/add-blog" enctype="multipart/form-data">
-
-            <div class="mb-3">
-                <input type="text" name="title"
-                       class="form-control modern-input"
-                       placeholder="Blog Title" required>
+    <div class="tab-pane fade" id="messagesTab" role="tabpanel">
+        <div class="card p-4 p-md-5 shadow-sm border-0" style="border-radius: var(--radius);">
+            <h4 class="fw-bold mb-4" style="color: var(--text);">Contact Messages</h4>
+            {% if messages %}
+            <div class="table-responsive">
+                <table class="table align-middle" style="color: var(--text);">
+                    <thead>
+                        <tr style="border-bottom: 2px solid var(--border);">
+                            <th class="fw-semibold pb-3">Name</th>
+                            <th class="fw-semibold pb-3">Email</th>
+                            <th class="fw-semibold pb-3">Subject</th>
+                            <th class="fw-semibold pb-3">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for msg in messages %}
+                        <tr style="border-bottom: 1px solid var(--border);">
+                            <td class="py-3 fw-medium">{{ msg["name"] }}</td>
+                            <td class="py-3"><a href="mailto:{{ msg['email'] }}" class="text-decoration-none" style="color: var(--primary);">{{ msg["email"] }}</a></td>
+                            <td class="py-3">{{ msg["subject"] }}</td>
+                            <td class="py-3 small" style="color: var(--muted);">{{ msg["created_at"] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
-
-            <div class="mb-4">
-                <label class="form-label fw-semibold" style="color: var(--muted); font-size: 0.9rem;">Blog Images</label>
-                <div id="blog-drop-zone" class="border rounded-4 p-4 text-center transition" style="border: 2px dashed var(--primary) !important; background: var(--surface-2); cursor: pointer;">
-                    <i class="bi bi-cloud-arrow-up display-4" style="color: var(--primary);"></i>
-                    <p class="mt-2 mb-1 fw-medium" style="color: var(--text);">Drag & Drop images here</p>
-                    <p class="small mb-3" style="color: var(--muted);">or click to browse</p>
-                    <input type="file" name="images" id="blog-file-input" class="d-none" multiple accept="image/png, image/jpeg, image/gif">
-                </div>
-                <div id="blog-preview-container" class="d-flex flex-wrap gap-3 mt-3"></div>
-            </div>
-
-            <div class="mb-4">
-                <textarea name="content"
-                          rows="6"
-                          class="form-control modern-input"
-                          placeholder="Write your content here..."
-                          required></textarea>
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold transition">
-                <i class="bi bi-send-check me-2"></i> Publish Post
-            </button>
-
-        </form>
-    </div>
-
-    <div class="card p-4 p-md-5 shadow-sm border-0" style="border-radius: var(--radius);">
-        <h4 class="fw-bold mb-4" style="color: var(--text);">Published Blogs</h4>
-
-        <ul class="dashboard-list m-0 p-0">
-            {% for blog in blogs %}
-            <li class="d-flex justify-content-between align-items-center py-3 border-bottom" style="border-color: var(--border) !important;">
-                <span class="fw-medium" style="color: var(--text);">{{ blog["title"] }}</span>
-                <div class="d-flex gap-2">
-                    <a href="/edit-blog/{{ blog['id'] }}"
-                       class="btn btn-sm btn-outline-warning rounded-pill px-3 transition">Edit</a>
-                    <a href="/delete-blog/{{ blog['id'] }}"
-                       class="btn btn-sm btn-outline-danger rounded-pill px-3 transition">Delete</a>
-                </div>
-            </li>
             {% else %}
-            <li class="py-4 text-center" style="color: var(--muted);">No blogs yet.</li>
-            {% endfor %}
-        </ul>
+            <div class="text-center py-5">
+                <i class="bi bi-inbox fs-1 mb-3 d-block" style="color: var(--muted);"></i>
+                <p style="color: var(--muted);">No messages yet.</p>
+            </div>
+            {% endif %} 
+        </div>
     </div>
 
-</div>
+    <div class="tab-pane fade" id="blogsTab" role="tabpanel">
+        <div class="card p-4 p-md-5 mb-5 shadow-sm border-0" style="border-radius: var(--radius);">
+            <h4 class="fw-bold mb-4" style="color: var(--text);">Add Blog Post</h4>
+            <form method="POST" action="/add-blog" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <input type="text" name="title" class="form-control modern-input" placeholder="Blog Title" required>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label fw-semibold" style="color: var(--muted); font-size: 0.9rem;">Blog Images</label>
+                    <div id="blog-drop-zone" class="border rounded-4 p-4 text-center transition" style="border: 2px dashed var(--primary) !important; background: var(--surface-2); cursor: pointer;">
+                        <i class="bi bi-cloud-arrow-up display-4" style="color: var(--primary);"></i>
+                        <p class="mt-2 mb-1 fw-medium" style="color: var(--text);">Drag & Drop images here</p>
+                        <p class="small mb-3" style="color: var(--muted);">or click to browse</p>
+                        <input type="file" name="images" id="blog-file-input" class="d-none" multiple accept="image/*">
+                    </div>
+                    <div id="blog-preview-container" class="d-flex flex-wrap gap-3 mt-3"></div>
+                </div>
+                <div class="mb-4">
+                    <textarea name="content" rows="6" class="form-control modern-input" placeholder="Write your content here..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold transition">
+                    <i class="bi bi-send-check me-2"></i> Publish Post
+                </button>
+            </form>
+        </div>
 
-<div class="tab-pane fade" id="certsTab" role="tabpanel">
+        <div class="card p-4 p-md-5 shadow-sm border-0" style="border-radius: var(--radius);">
+            <h4 class="fw-bold mb-4" style="color: var(--text);">Published Blogs</h4>
+            <ul class="dashboard-list m-0 p-0">
+                {% for blog in blogs %}
+                <li class="d-flex justify-content-between align-items-center py-3 border-bottom" style="border-color: var(--border) !important;">
+                    <span class="fw-medium" style="color: var(--text);">{{ blog["title"] }}</span>
+                    <div class="d-flex gap-2">
+                        <a href="/edit-blog/{{ blog['id'] }}" class="btn btn-sm btn-outline-warning rounded-pill px-3 transition">Edit</a>
+                        <a href="/delete-blog/{{ blog['id'] }}" class="btn btn-sm btn-outline-danger rounded-pill px-3 transition">Delete</a>
+                    </div>
+                </li>
+                {% else %}
+                <li class="py-4 text-center" style="color: var(--muted);">No blogs yet.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="certsTab" role="tabpanel">
         <div class="card p-4 p-md-5 mb-5 shadow-sm border-0" style="border-radius: var(--radius);">
             <h4 class="fw-bold mb-4" style="color: var(--text);">Add Certification</h4>
             <form method="POST" action="/add-certification" enctype="multipart/form-data">
@@ -255,8 +207,23 @@
                 </button>
             </form>
         </div>
+        <div class="card p-4 p-md-5 shadow-sm border-0" style="border-radius: var(--radius);">
+            <h4 class="fw-bold mb-4" style="color: var(--text);">Existing Certifications</h4>
+            <ul class="dashboard-list m-0 p-0">
+                {% for cert in certifications %}
+                <li class="d-flex justify-content-between align-items-center py-3 border-bottom" style="border-color: var(--border) !important;">
+                    <span class="fw-medium" style="color: var(--text);">{{ cert["name"] }}</span>
+                    <div class="d-flex gap-2">
+                        <a href="/edit-certification/{{ cert['id'] }}" class="btn btn-sm btn-outline-warning rounded-pill px-3 transition">Edit</a>
+                        <a href="/delete-certification/{{ cert['id'] }}" class="btn btn-sm btn-outline-danger rounded-pill px-3 transition" onclick="return confirm('Are you sure you want to delete this certification?');">Delete</a>
+                    </div>
+                </li>
+                {% else %}
+                <li class="py-4 text-center" style="color: var(--muted);">No certifications yet.</li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 
-</div>
-
+</div> 
 {% endblock %}

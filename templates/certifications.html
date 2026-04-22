@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Certifications{% endblock %}
+
+{% block content %}
+
+<section class="cert-hero text-center py-5 mb-5 position-relative overflow-hidden">
+    <div class="container position-relative z-1">
+        <h1 class="fw-bold display-4">Licenses & Certifications</h1>
+        <p class="mt-3 fs-5 mx-auto" style="color: rgba(255,255,255,0.8); max-width: 600px;">
+            Professional credentials, exams, and validated expertise.
+        </p>
+    </div>
+</section>
+
+<section class="container pb-5">
+    <div class="row g-4 justify-content-center">
+        
+        {% for cert in certifications %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-0 transition text-center overflow-hidden" style="border-radius: var(--radius); background: var(--surface-2);">
+                
+                {% if cert.image_name %}
+                <div style="height: 220px; background: white; padding: 20px; display: flex; align-items: center; justify-content: center;">
+                    <img src="{{ url_for('static', filename='uploads/' + cert.image_name) }}" 
+                         alt="{{ cert.name }}" 
+                         style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                </div>
+                {% else %}
+                <div class="d-flex align-items-center justify-content-center" style="height: 220px; background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%); border-bottom: 1px solid var(--border);">
+                    <i class="bi bi-patch-check display-1" style="color: var(--primary); opacity: 0.3;"></i>
+                </div>
+                {% endif %}
+
+                <div class="card-body p-4 d-flex flex-column">
+                    <h4 class="fw-bold mb-2" style="color: var(--text);">{{ cert.name }}</h4>
+                    <p class="mb-4 fw-medium" style="color: var(--muted);">{{ cert.issuing_organization }}</p>
+                    
+                    <div class="mt-auto">
+                        {% if cert.cert_link %}
+                        <a href="{{ cert.cert_link }}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary rounded-pill px-4 py-2 fw-semibold transition w-100">
+                            Verify Credential <i class="bi bi-box-arrow-up-right ms-2" style="font-size: 0.85rem;"></i>
+                        </a>
+                        {% else %}
+                        <span class="badge bg-secondary bg-opacity-25 rounded-pill px-3 py-2 fw-medium" style="color: var(--text);">Verified Internally</span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12 text-center py-5">
+            <div class="p-5 rounded-4 shadow-sm" style="background: var(--surface); border: 1px solid var(--border);">
+                <i class="bi bi-award fs-1 mb-3" style="color: var(--muted);"></i>
+                <h4 style="color: var(--text);">No certifications uploaded yet.</h4>
+                <p style="color: var(--muted);">Check back soon for new credentials.</p>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</section>
+
+{% endblock %}

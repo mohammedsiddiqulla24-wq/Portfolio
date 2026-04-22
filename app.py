@@ -35,6 +35,12 @@ def home():
     cur.execute("SELECT COUNT(*) as total FROM certifications")
     cert_count = cur.fetchone()["total"]
 
+    cur.execute("SELECT COUNT(*) as total FROM certifications")
+    cert_count = cur.fetchone()["total"]
+
+    cur.execute("SELECT * FROM certifications ORDER BY created_at DESC")
+    certifications = cur.fetchall()
+
     start_year = 2024
     current_year = datetime.now().year
     experience_years = current_year - start_year
@@ -46,7 +52,8 @@ def home():
         project_count=project_count,
         tech_count=tech_count,
         experience_years=experience_years,
-        cert_count=cert_count  
+        cert_count=cert_count,
+        certifications=certifications  
     )
 
 @app.route("/add-certification", methods=["POST"])
@@ -241,13 +248,17 @@ def dashboard():
     cur.execute("SELECT * FROM blog_posts ORDER BY created_at DESC")
     blogs = cur.fetchall()
 
+    cur.execute("SELECT * FROM certifications ORDER BY created_at DESC")
+    certifications = cur.fetchall()
+
     cur.close()
 
     return render_template(
         "dashboard.html",
         projects=projects,
         messages=messages,
-        blogs=blogs  
+        blogs=blogs,
+        certifications=certifications 
     )
 
 @app.route("/blog")
@@ -408,6 +419,71 @@ def download_resume():
         return "No resume uploaded yet."
 
     return redirect(url_for('static', filename='resume/' + resume["file_name"]))
+
+@app.route("/certifications")
+def certifications():
+    cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    
+    cur.execute("SELECT * FROM certifications ORDER BY created_at DESC")
+    certifications = cur.fetchall()
+    
+    cur.close()
+
+    return render_template("certifications.html", certifications=certifications)
+
+@app.route("/delete-certification/<int:cert_id>")
+def delete_certification(cert_id):
+    if "admin" not in session:
+        return redirect(url_for("login"))
+
+    cur = mysql.connection.cursor()
+    cur.execute("DELETE FROM certifications WHERE id=%s", (cert_id,))
+    mysql.connection.commit()
+    cur.close()
+
+    flash("Certification deleted!", "danger")
+    return redirect(url_for("dashboard"))
+
+@app.route("/edit-certification/<int:cert_id>", methods=["GET", "POST"])
+def edit_certification(cert_id):
+    if "admin" not in session:
+        return redirect(url_for("login"))
+
+    cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+    if request.method == "POST":
+        name = request.form["name"]
+        org = request.form["organization"]
+        link = request.form["link"]
+        image = request.files.get("image")
+
+        if image and allowed_file(image.filename):
+
+            filename = secure_filename(image.filename)
+            image.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+            cur.execute("""
+                UPDATE certifications 
+                SET name=%s, issuing_organization=%s, cert_link=%s, image_name=%s 
+                WHERE id=%s
+            """, (name, org, link, filename, cert_id))
+        else:
+            cur.execute("""
+                UPDATE certifications 
+                SET name=%s, issuing_organization=%s, cert_link=%s 
+                WHERE id=%s
+            """, (name, org, link, cert_id))
+
+        mysql.connection.commit()
+        cur.close()
+
+        flash("Certification updated successfully!", "success")
+        return redirect(url_for("dashboard"))
+
+    cur.execute("SELECT * FROM certifications WHERE id=%s", (cert_id,))
+    cert = cur.fetchone()
+    cur.close()
+
+    return render_template("edit_certification.html", cert=cert)
 
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in app.config["ALLOWED_EXTENSIONS"]

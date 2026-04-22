@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Edit Certification{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <h2 class="fw-bold m-0" style="color: var(--text);">Edit Certification</h2>
+                <a href="/dashboard" class="btn btn-outline-secondary rounded-pill px-4 transition">Cancel</a>
+            </div>
+
+            <div class="card p-4 p-md-5 shadow-sm border-0" style="border-radius: var(--radius); background: var(--surface);">
+                <form method="POST" enctype="multipart/form-data">
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold" style="color: var(--muted);">Certification Name</label>
+                        <input type="text" name="name" class="form-control modern-input" value="{{ cert.name }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold" style="color: var(--muted);">Issuing Organization</label>
+                        <input type="text" name="organization" class="form-control modern-input" value="{{ cert.issuing_organization }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold" style="color: var(--muted);">Credential Link (URL)</label>
+                        <input type="text" name="link" class="form-control modern-input" value="{{ cert.cert_link }}">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold" style="color: var(--muted);">Update Badge/Image (Leave blank to keep current)</label>
+                        {% if cert.image_name %}
+                        <div class="mb-2">
+                            <small style="color: var(--muted);">Current image: {{ cert.image_name }}</small>
+                        </div>
+                        {% endif %}
+                        <input type="file" name="image" class="form-control modern-input" accept="image/*">
+                    </div>
+
+                    <button type="submit" class="btn btn-warning btn-lg w-100 rounded-pill fw-bold transition shadow-sm">
+                        <i class="bi bi-save me-2"></i> Save Changes
+                    </button>
+                    
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}

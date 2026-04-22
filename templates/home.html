@@ -28,9 +28,14 @@
                 </p>
 
                 <div class="d-flex flex-column flex-sm-row align-items-center justify-content-center justify-content-lg-start gap-3 mb-4">
-                    <a href="/projects" class="btn btn-primary btn-lg rounded-pill px-4 py-2 fw-semibold transition">
+                    <a href="/projects" class="btn btn-primary btn-lg rounded-pill px-4 py-2 fw-semibold transition shadow-sm">
                         View Projects <i class="bi bi-arrow-right ms-2"></i>
                     </a>
+                    
+                    <a href="/download-resume" target="_blank" class="btn btn-outline-light btn-lg rounded-pill px-4 py-2 fw-semibold transition">
+                        <i class="bi bi-file-earmark-pdf me-2"></i> Resume
+                    </a>
+                    
                     <a href="/contact" class="btn btn-outline-light btn-lg rounded-pill px-4 py-2 fw-semibold transition">
                         Contact Me
                     </a>
@@ -67,49 +72,55 @@
 
 <section class="py-5 mb-5">
     <div class="container">
-        <div class="row g-4 text-center">
+        <div class="row g-4 text-center" id="stats-container">
 
-            <div class="col-sm-6 col-lg-3">
-                <div class="stat-card p-4 h-100 d-flex flex-column justify-content-center">
-                    <i class="bi bi-kanban fs-1 mb-3" style="color: var(--primary);"></i>
-                    <h2 class="fw-bolder display-5 mb-1" style="color: var(--text);">
-                        {{ project_count }}<span style="color: var(--primary);">+</span>
-                    </h2>
-                    <p class="mb-0 fw-medium" style="color: var(--muted);">Projects Built</p>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-lg-3">
-                <div class="stat-card p-4 h-100 d-flex flex-column justify-content-center">
-                    <i class="bi bi-braces-asterisk fs-1 mb-3" style="color: var(--primary);"></i>
-                    <h2 class="fw-bolder display-5 mb-1" style="color: var(--text);">
-                        {{ tech_count }}<span style="color: var(--primary);">+</span>
-                    </h2>
-                    <p class="mb-0 fw-medium" style="color: var(--muted);">Technologies Used</p>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-lg-3">
-                <div class="stat-card p-4 h-100 d-flex flex-column justify-content-center">
-                    <i class="bi bi-clock-history fs-1 mb-3" style="color: var(--primary);"></i>
-                                        <h2 class="fw-bolder display-5 mb-1" style="color: var(--text);">
-                        <span class="counter" data-target="{{ experience_years }}">0</span><span style="color: var(--primary);">+</span>
-                    </h2>
-                    <p class="mb-0 fw-medium" style="color: var(--muted);">Years Building</p>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-lg-3">
-                <div class="stat-card p-4 h-100 d-flex flex-column justify-content-center">
-                    <i class="bi bi-award fs-1 mb-3" style="color: var(--primary);"></i>
-                    <h2 class="fw-bolder display-5 mb-1" style="color: var(--text);">
-                        1
-                    </h2>
-                    <p class="mb-0 fw-medium" style="color: var(--muted);">Certifications</p>
-                </div>
-            </div>
-
+    <div class="col-sm-6 col-lg-3 reveal-up">
+        <div class="stat-card p-4 h-100 d-flex flex-column justify-content-center">
+            <i class="bi bi-kanban fs-1 mb-3" style="color: var(--primary);"></i>
+            <h2 class="fw-bolder display-5 mb-1" style="color: var(--text);">
+                <span class="counter" data-target="{{ project_count }}">{{ project_count }}</span><span style="color: var(--primary);">+</span>
+            </h2>
+            <p class="mb-0 fw-medium" style="color: var(--muted);">Projects Built</p>
         </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3 reveal-up delay-100">
+        <div class="stat-card p-4 h-100 d-flex flex-column justify-content-center">
+            <i class="bi bi-braces-asterisk fs-1 mb-3" style="color: var(--primary);"></i>
+            <h2 class="fw-bolder display-5 mb-1" style="color: var(--text);">
+                <span class="counter" data-target="{{ tech_count }}">{{ tech_count }}</span><span style="color: var(--primary);">+</span>
+            </h2>
+            <p class="mb-0 fw-medium" style="color: var(--muted);">Technologies Used</p>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3 reveal-up delay-200">
+        <div class="stat-card p-4 h-100 d-flex flex-column justify-content-center">
+            <i class="bi bi-clock-history fs-1 mb-3" style="color: var(--primary);"></i>
+            <h2 class="fw-bolder display-5 mb-1" style="color: var(--text);">
+                <span class="counter" data-target="{{ experience_years }}">{{ experience_years }}</span><span style="color: var(--primary);">+</span>
+            </h2>
+            <p class="mb-0 fw-medium" style="color: var(--muted);">Years Building</p>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3 reveal-up delay-300">
+    <a href="/certifications" class="text-decoration-none d-block h-100">
+        <div class="stat-card p-4 h-100 d-flex flex-column justify-content-center transition" style="cursor: pointer;">
+            <i class="bi bi-award fs-1 mb-3" style="color: var(--primary);"></i>
+            <h2 class="fw-bolder display-5 mb-1" style="color: var(--text);">
+                <span class="counter" data-target="{{ cert_count }}">{{ cert_count }}</span>
+            </h2>
+            <p class="mb-0 fw-medium" style="color: var(--muted);">Certifications</p>
+            
+            <div class="mt-3" style="color: var(--primary); font-size: 0.85rem;">
+                View All <i class="bi bi-arrow-right"></i>
+            </div>
+        </div>
+    </a>
+</div>
+
+</div>
     </div>
 </section>
 
