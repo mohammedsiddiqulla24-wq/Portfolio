@@ -27,6 +27,10 @@ class Config:
         MYSQL_PORT = int(os.environ.get("MYSQL_PORT", 3306))
         MYSQL_SSL_CA = os.environ.get("MYSQL_SSL_CA")
 
+        # Password of admin of Aiven
+        # mail: admin@siddiq.com
+        # Password: admin123
+
     else:
         MYSQL_HOST = "localhost"
         MYSQL_USER = "root"

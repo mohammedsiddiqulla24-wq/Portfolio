@@ -41,7 +41,7 @@ CREATE TABLE project_images (
     FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
 );
 
-ALTER TABLE projects DROP COLUMN image_url;
+-- ALTER TABLE projects DROP COLUMN image_url;
 
 CREATE TABLE resume (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -64,4 +64,13 @@ CREATE TABLE certifications (
     cert_link VARCHAR(300),
     image_name VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- to create a user
+INSERT INTO users (username, email, password_hash)
+VALUES (
+    'admin',
+    'admin@example.com',
+    '$2b$12$KIXQ4qYFQ6Q8YlV8Qq8z1e9JtZ0k9YpQnZ8uVQZz1Yz8zXyZzZzZz'
 );
