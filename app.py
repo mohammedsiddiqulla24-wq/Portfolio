@@ -11,6 +11,8 @@ app.config.from_object(Config)
 
 app.config["UPLOAD_FOLDER"] = "static/uploads"
 app.config["ALLOWED_EXTENSIONS"] = {"png", "jpg", "jpeg", "gif", "pdf"}
+
+app.config['MYSQL_SSL_CA'] = app.config.get("MYSQL_SSL_CA")
 mysql = MySQL(app)
 
 
