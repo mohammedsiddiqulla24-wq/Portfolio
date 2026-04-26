@@ -33,6 +33,16 @@
             <i class="bi bi-patch-check me-2"></i> Certifications
         </button>
     </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link rounded-pill px-4 fw-semibold transition d-flex align-items-center" data-bs-toggle="tab" data-bs-target="#expTab" type="button" role="tab">
+            <i class="bi bi-briefcase me-2"></i> Experience
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link rounded-pill px-4 fw-semibold transition d-flex align-items-center" data-bs-toggle="tab" data-bs-target="#eduTab" type="button" role="tab">
+            <i class="bi bi-mortarboard me-2"></i> Education
+        </button>
+    </li>
 </ul>
 
 <div class="tab-content">
@@ -220,6 +230,100 @@
                 </li>
                 {% else %}
                 <li class="py-4 text-center" style="color: var(--muted);">No certifications yet.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="expTab" role="tabpanel">
+        <div class="card p-4 p-md-5 mb-5 shadow-sm border-0" style="border-radius: var(--radius);">
+            <h4 class="fw-bold mb-4" style="color: var(--text);">Add Work Experience</h4>
+            <form method="POST" action="/add-timeline">
+                <input type="hidden" name="category" value="experience">
+                
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <input type="text" name="title" class="form-control modern-input" placeholder="Job Title (e.g., Salesforce Developer)" required>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" name="organization" class="form-control modern-input" placeholder="Company (e.g., Axolt)" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <input type="text" name="duration" class="form-control modern-input" placeholder="Duration (e.g., April 2024 - Present)" required>
+                </div>
+                <div class="mb-4">
+                    <textarea name="description" rows="3" class="form-control modern-input" placeholder="Description of your role and achievements..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold transition">
+                    <i class="bi bi-plus-circle me-2"></i> Add Experience
+                </button>
+            </form>
+        </div>
+
+        <div class="card p-4 p-md-5 shadow-sm border-0" style="border-radius: var(--radius);">
+            <h4 class="fw-bold mb-4" style="color: var(--text);">Existing Experience</h4>
+            <ul class="dashboard-list m-0 p-0">
+                {% for job in experience %}
+                <li class="d-flex justify-content-between align-items-center py-3 border-bottom" style="border-color: var(--border) !important;">
+                    <div>
+                        <span class="fw-bold d-block" style="color: var(--text);">{{ job.title }}</span>
+                        <small style="color: var(--muted);">{{ job.organization }} | {{ job.duration }}</small>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a href="/edit-timeline/{{ job.id }}" class="btn btn-sm btn-outline-warning rounded-pill px-3 transition">Edit</a>
+                        <a href="/delete-timeline/{{ job.id }}" class="btn btn-sm btn-outline-danger rounded-pill px-3 transition" onclick="return confirm('Delete this entry?');">Delete</a>
+                    </div>
+                </li>
+                {% else %}
+                <li class="py-4 text-center" style="color: var(--muted);">No experience entries yet.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="eduTab" role="tabpanel">
+        <div class="card p-4 p-md-5 mb-5 shadow-sm border-0" style="border-radius: var(--radius);">
+            <h4 class="fw-bold mb-4" style="color: var(--text);">Add Education</h4>
+            <form method="POST" action="/add-timeline">
+                <input type="hidden" name="category" value="education">
+                
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <input type="text" name="title" class="form-control modern-input" placeholder="Degree (e.g., Bachelor of Computer Applications)" required>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" name="organization" class="form-control modern-input" placeholder="Institution (e.g., Oxford institute of technologies)" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <input type="text" name="duration" class="form-control modern-input" placeholder="Duration (e.g., 2021 - 2024)" required>
+                </div>
+                <div class="mb-4">
+                    <textarea name="description" rows="3" class="form-control modern-input" placeholder="Description of coursework, GPA, etc..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold transition">
+                    <i class="bi bi-plus-circle me-2"></i> Add Education
+                </button>
+            </form>
+        </div>
+
+        <div class="card p-4 p-md-5 shadow-sm border-0" style="border-radius: var(--radius);">
+            <h4 class="fw-bold mb-4" style="color: var(--text);">Existing Education</h4>
+            <ul class="dashboard-list m-0 p-0">
+                {% for edu in education %}
+                <li class="d-flex justify-content-between align-items-center py-3 border-bottom" style="border-color: var(--border) !important;">
+                    <div>
+                        <span class="fw-bold d-block" style="color: var(--text);">{{ edu.title }}</span>
+                        <small style="color: var(--muted);">{{ edu.organization }} | {{ edu.duration }}</small>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a href="/edit-timeline/{{ edu.id }}" class="btn btn-sm btn-outline-warning rounded-pill px-3 transition">Edit</a>
+                        <a href="/delete-timeline/{{ edu.id }}" class="btn btn-sm btn-outline-danger rounded-pill px-3 transition" onclick="return confirm('Delete this entry?');">Delete</a>
+                    </div>
+                </li>
+                {% else %}
+                <li class="py-4 text-center" style="color: var(--muted);">No education entries yet.</li>
                 {% endfor %}
             </ul>
         </div>

@@ -96,6 +96,10 @@
 
                     <div class="mt-auto d-flex flex-wrap gap-2">
 
+                        <a href="/project/{{ project.id }}" class="btn btn-outline-primary btn-sm rounded-pill px-3 py-2 transition d-inline-flex align-items-center fw-medium flex-grow-1 justify-content-center">
+                            Case Study <i class="bi bi-arrow-right ms-2"></i>
+                        </a>
+
                         {% if project["github_link"] %}
                         <a href="{{ project['github_link'] }}"
                            target="_blank" rel="noopener noreferrer"

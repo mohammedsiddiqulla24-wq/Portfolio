@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}{{ project.title }}{% endblock %}
+
+{% block content %}
+
+<section class="projects-hero text-center mb-5 position-relative overflow-hidden" style="padding: 60px 20px;">
+    <div class="container position-relative z-1">
+        <span class="tech-badge mb-3">Case Study</span>
+        <h1 class="fw-bold display-4 mt-2 mb-3">{{ project.title }}</h1>
+        
+        {% if project.tech_stack %}
+        <div class="d-flex justify-content-center flex-wrap gap-2 mt-4">
+            {% for tech in project.tech_stack.split(",") %}
+                <span class="badge bg-white bg-opacity-10 text-white border-0 px-3 py-2" style="font-size: 0.9rem;">
+                    {{ tech.strip() }}
+                </span>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<div class="row justify-content-center pb-5">
+    <div class="col-lg-10 col-xl-8">
+        
+        <article class="card p-4 p-md-5 border-0 shadow-sm" style="border-radius: var(--radius); background: var(--surface);">
+
+            {% if project.images %}
+            <div id="projectCarousel" class="carousel slide mb-5 shadow-sm" data-bs-ride="carousel" style="border-radius: calc(var(--radius) - 4px); overflow: hidden; border: 1px solid var(--border);">
+                <div class="carousel-inner">
+                    {% for img in project.images %}
+                    <div class="carousel-item {% if loop.first %}active{% endif %}">
+                        <img src="{{ url_for('static', filename='uploads/' + img.image_name) }}"
+                             class="d-block w-100"
+                             style="max-height: 500px; object-fit: cover;"
+                             alt="{{ project.title }} screenshot">
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                {% if project.images|length > 1 %}
+                <button class="carousel-control-prev" type="button" data-bs-target="#projectCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#projectCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));"></span>
+                </button>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <h4 class="fw-bold mb-4" style="color: var(--text);">Project Overview</h4>
+            <div class="project-content mb-5" style="color: var(--text); font-size: 1.1rem; line-height: 1.8; white-space: pre-wrap;">
+                {{ project.description }}
+            </div>
+
+            <hr class="my-5" style="border-color: var(--border);">
+
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3">
+                <a href="/projects" class="btn btn-outline-secondary rounded-pill px-4 py-2 transition d-inline-flex align-items-center gap-2">
+                    <i class="bi bi-arrow-left"></i> Back to Projects
+                </a>
+
+                <div class="d-flex gap-3">
+                    {% if project.github_link %}
+                    <a href="{{ project.github_link }}" target="_blank" class="btn rounded-pill px-4 py-2 transition d-inline-flex align-items-center gap-2" style="background: var(--surface-2); color: var(--text); border: 1px solid var(--border);">
+                        <i class="bi bi-github"></i> View Code
+                    </a>
+                    {% endif %}
+
+                    {% if project.live_link %}
+                    <a href="{{ project.live_link }}" target="_blank" class="btn btn-primary rounded-pill px-4 py-2 transition d-inline-flex align-items-center gap-2 fw-medium">
+                        Live Demo <i class="bi bi-box-arrow-up-right"></i>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+
+        </article>
+        
+    </div>
+</div>
+
+{% endblock %}

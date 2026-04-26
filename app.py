@@ -49,6 +49,12 @@ def home():
     current_year = datetime.now().year
     experience_years = current_year - start_year
 
+    cur.execute("SELECT * FROM timeline WHERE category='experience' ORDER BY id DESC")
+    experience = cur.fetchall()
+
+    cur.execute("SELECT * FROM timeline WHERE category='education' ORDER BY id DESC")
+    education = cur.fetchall()
+
     cur.close()
 
     return render_template(
@@ -57,7 +63,9 @@ def home():
         tech_count=tech_count,
         experience_years=experience_years,
         cert_count=cert_count,
-        certifications=certifications  
+        certifications=certifications,
+        experience=experience,
+        education=education 
     )
 
 @app.route("/add-certification", methods=["POST"])
@@ -255,6 +263,12 @@ def dashboard():
     cur.execute("SELECT * FROM certifications ORDER BY created_at DESC")
     certifications = cur.fetchall()
 
+    cur.execute("SELECT * FROM timeline WHERE category='experience' ORDER BY created_at DESC")
+    experience = cur.fetchall()
+
+    cur.execute("SELECT * FROM timeline WHERE category='education' ORDER BY created_at DESC")
+    education = cur.fetchall()
+
     cur.close()
 
     return render_template(
@@ -262,7 +276,9 @@ def dashboard():
         projects=projects,
         messages=messages,
         blogs=blogs,
-        certifications=certifications 
+        certifications=certifications,
+        experience=experience,
+        education=education
     )
 
 @app.route("/blog")
@@ -488,6 +504,104 @@ def edit_certification(cert_id):
     cur.close()
 
     return render_template("edit_certification.html", cert=cert)
+
+@app.route("/project/<int:project_id>")
+def project_detail(project_id):
+    cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    
+    cur.execute("SELECT * FROM projects WHERE id=%s", (project_id,))
+    project = cur.fetchone()
+    
+    if not project:
+        cur.close()
+        return "Project not found", 404
+        
+    cur.execute("SELECT image_name FROM project_images WHERE project_id=%s", (project_id,))
+    project["images"] = cur.fetchall()
+    
+    cur.close()
+
+    return render_template("project_detail.html", project=project)
+
+@app.route("/add-timeline", methods=["POST"])
+def add_timeline():
+    if "admin" not in session:
+        return redirect(url_for("login"))
+
+    category = request.form["category"]
+    title = request.form["title"]
+    organization = request.form["organization"]
+    duration = request.form["duration"]
+    description = request.form["description"]
+
+    cur = mysql.connection.cursor()
+    cur.execute("""
+        INSERT INTO timeline (category, title, organization, duration, description)
+        VALUES (%s, %s, %s, %s, %s)
+    """, (category, title, organization, duration, description))
+    mysql.connection.commit()
+    cur.close()
+
+    flash("Timeline entry added successfully!", "success")
+    return redirect(url_for("dashboard"))
+
+@app.route("/delete-timeline/<int:entry_id>")
+def delete_timeline(entry_id):
+    if "admin" not in session:
+        return redirect(url_for("login"))
+
+    cur = mysql.connection.cursor()
+    cur.execute("DELETE FROM timeline WHERE id=%s", (entry_id,))
+    mysql.connection.commit()
+    cur.close()
+
+    flash("Timeline entry deleted!", "danger")
+    return redirect(url_for("dashboard"))
+
+@app.route("/edit-timeline/<int:entry_id>", methods=["GET", "POST"])
+def edit_timeline(entry_id):
+    if "admin" not in session:
+        return redirect(url_for("login"))
+
+    cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+
+    if request.method == "POST":
+        title = request.form["title"]
+        organization = request.form["organization"]
+        duration = request.form["duration"]
+        description = request.form["description"]
+
+        cur.execute("""
+            UPDATE timeline 
+            SET title=%s, organization=%s, duration=%s, description=%s 
+            WHERE id=%s
+        """, (title, organization, duration, description, entry_id))
+        
+        mysql.connection.commit()
+        cur.close()
+
+        flash("Timeline entry updated successfully!", "success")
+        return redirect(url_for("dashboard"))
+
+    cur.execute("SELECT * FROM timeline WHERE id=%s", (entry_id,))
+    entry = cur.fetchone()
+    cur.close()
+
+    return render_template("edit_timeline.html", entry=entry)
+
+@app.route("/journey")
+def journey():
+    cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    
+    cur.execute("SELECT * FROM timeline WHERE category='experience' ORDER BY created_at DESC")
+    experience = cur.fetchall()
+
+    cur.execute("SELECT * FROM timeline WHERE category='education' ORDER BY created_at DESC")
+    education = cur.fetchall()
+    
+    cur.close()
+
+    return render_template("journey.html", experience=experience, education=education)
 
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in app.config["ALLOWED_EXTENSIONS"]

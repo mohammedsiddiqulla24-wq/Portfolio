@@ -66,6 +66,16 @@ CREATE TABLE certifications (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE timeline (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    category VARCHAR(50) NOT NULL, 
+    title VARCHAR(255) NOT NULL,  
+    organization VARCHAR(255) NOT NULL, 
+    duration VARCHAR(100) NOT NULL, 
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 
 -- to create a user
 INSERT INTO users (username, email, password_hash)
